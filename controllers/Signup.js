@@ -1,5 +1,6 @@
 const User = require("../modals/usermodal");
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 
 const Signup = (req, res) => {
   let exist;
@@ -8,12 +9,13 @@ const Signup = (req, res) => {
     if (exist) {
       res.status(409).send({ msg: "user already exists" });
     } else {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const user = new User({
         _id: new mongoose.Types.ObjectId().toHexString(),
         name: req.body.name,
         email: req.body.email,
         contact: req.body.contact,
-        password: req.body.password,
+        password: hashedPassword,
       });
       try {
         user.save();

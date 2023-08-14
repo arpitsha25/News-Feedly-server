@@ -1,10 +1,17 @@
 const User = require("../modals/usermodal");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const Login = (req, res) => {
   let chk;
   async function exist() {
     chk = await User.findOne({ email: req.body.email });
-    if (chk && chk.password == req.body.password) {
+    const isPasswordValid = await bcrypt.compare(
+      req.body.password,
+      chk.password
+    );
+
+    if (isPasswordValid) {
       res.status(200).send({ msg: "success" });
     } else {
       res.status(404).send({ msg: "check credentials" });
@@ -12,5 +19,5 @@ const Login = (req, res) => {
   }
   exist();
 };
- 
+
 module.exports = { Login };
