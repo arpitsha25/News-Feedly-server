@@ -1,7 +1,8 @@
 const User = require("../modals/usermodal");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
+const jwt = require('jsonwebtoken');
+const { jwtsecretkey } = require("../cred");
 const Login = (req, res) => {
   let chk;
   async function exist() {
@@ -12,7 +13,8 @@ const Login = (req, res) => {
     );
 
     if (isPasswordValid) {
-      res.status(200).send({ msg: "success" });
+      const jwttoken = jwt.sign({ email: req.body.email }, jwtsecretkey, { expiresIn: '1h' });
+      res.status(200).send({ msg: "success" ,token : jwttoken});
     } else {
       res.status(404).send({ msg: "check credentials" });
     }

@@ -1,6 +1,8 @@
 // const mongoose = require("mongoose");
 const Newsschema = require("../modals/newsmodal");
 const Searchnews = (req, res) => {
+  // const token = req.header('Authorization');
+  // console.log(token)
   const item = req.body.searchitem;
   let searched;
   async function search() {

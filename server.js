@@ -7,18 +7,20 @@ const { Login } = require("./controllers/Login");
 const { Signup } = require("./controllers/Signup");
 const { Searchnews } = require("./controllers/Searchnews");
 const { Dumpnews } = require("./controllers/Dumpnews");
+const { mongouri } = require("./cred");
+const { VerifyToken } = require("./middleware/verifytoken");
 const app = express();
 app.use(express.json());
 app.use(cors());
 const port = 8080;
 app.post("/login", Login);
 app.post("/signup", Signup);
+app.get("/authenticate", VerifyToken, function (req, res) {
+  res.status(200).send({ success: true , msg: "authenticated" });
+});
 app.post("/searchnews", Searchnews);
 
-mongoose.connect(
-  "mongodb+srv://cluster0admin:cluster0admin@cluster0.iq82tkg.mongodb.net/NewsFeedly?retryWrites=true&w=majority",
-  { useNewUrlParser: true }
-);
+mongoose.connect(mongouri, { useNewUrlParser: true });
 mongoose.connection
   .once("open", function () {
     console.log("Database connected Successfully");
