@@ -18,7 +18,7 @@ app.post("/signup", Signup);
 app.get("/authenticate", VerifyToken, function (req, res) {
   res.status(200).send({ success: true , msg: "authenticated" });
 });
-app.post("/searchnews", Searchnews);
+app.post("/searchnews", VerifyToken, Searchnews);
 
 mongoose.connect(mongouri, { useNewUrlParser: true });
 mongoose.connection
